@@ -1,0 +1,29 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/postgres/data/
+    environment:
+      - POSTGRES_DB=sreality_clone_db
+      - POSTGRES_USER=vikiedr
+      - POSTGRES_PASSWORD=wouldnt_normally_put_password_here
+  web:
+    build: ./web
+    command: sh -c "
+        python manage.py makemigrations &&
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - ./web:/code
+    ports:
+      - "8080:8000"
+    environment:
+      - POSTGRES_NAME=sreality_clone_db
+      - POSTGRES_USER=vikiedr
+      - POSTGRES_PASSWORD=wouldnt_normally_put_password_here
+    depends_on:
+      - db
+volumes:
+  postgres_data:
