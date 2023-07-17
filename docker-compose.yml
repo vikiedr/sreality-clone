@@ -25,5 +25,7 @@ services:
       - POSTGRES_PASSWORD=wouldnt_normally_put_password_here
     depends_on:
       - db
+  scraper:
+    build: ./scraper
 volumes:
   postgres_data:
