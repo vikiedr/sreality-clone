@@ -8,6 +8,11 @@ services:
       - POSTGRES_DB=sreality_clone_db
       - POSTGRES_USER=vikiedr
       - POSTGRES_PASSWORD=wouldnt_normally_put_password_here
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "vikiedr", "-d", "sreality_clone_db", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
   web:
     build: ./web
     command: sh -c "
@@ -24,8 +29,24 @@ services:
       - POSTGRES_USER=vikiedr
       - POSTGRES_PASSWORD=wouldnt_normally_put_password_here
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "manage.py", "check"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
   scraper:
     build: ./scraper
+    command: scrapy crawl flatsSell
+    volumes:
+      - ./scraper:/code
+    environment:
+      - POSTGRES_NAME=sreality_clone_db
+      - POSTGRES_USER=vikiedr
+      - POSTGRES_PASSWORD=wouldnt_normally_put_password_here
+    depends_on:
+      web:
+        condition: service_healthy
 volumes:
   postgres_data:
