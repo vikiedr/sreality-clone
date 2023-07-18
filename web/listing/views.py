@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Flat
 
 # Create your views here.
-def test(request):
-    return HttpResponse(status=200)
+def list_flats(request):
+    flats = Flat.objects.all()
+    return render(request, "list_flats.html", {'flats': flats})
+    
