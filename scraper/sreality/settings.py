@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "sreality.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "sreality (+http://www.yourdomain.com)"
+USER_AGENT = "facebot"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
