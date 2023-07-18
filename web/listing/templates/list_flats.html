@@ -5,10 +5,41 @@
 {% endblock %}
 
 {% block content %}
-    {% for flat in flats %}
-        <figure class="figure">
-            <img src="{{flat.img_url}}" class="figure-img img-fluid rounded">
-            <figcaption class="figure-caption text-center">{{flat.title}}</figcaption>
-        </figure>
-    {% endfor %}
+    <div class="scrape_pick_container">
+        <select name="scrape_id">
+            {% for id in scrape_ids %}
+                {% if id == scrape_id %}
+                    <option value="{{ id }}" selected>{{ id }}</option>
+                {% else %}
+                    <option value="{{ id }}">{{ id }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+  
+    <div>
+        {% for flat in flats %}
+            <figure class="figure">
+                <img src="{{flat.img_url}}" class="figure-img img-fluid rounded">
+                <figcaption class="figure-caption text-center">{{flat.title}}</figcaption>
+            </figure>
+        {% endfor %}
+    </div>
+
+    <style>
+        .scrape_pick_container {
+            text-align: center;
+            padding-bottom: 30px;
+        }
+    </style>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('select[name="scrape_id"]').on('change', function() {
+                const selectedValue = $(this).val();
+                window.location.href = `/scrape/${selectedValue}`;
+            });
+        });
+    </script>
 {% endblock %}

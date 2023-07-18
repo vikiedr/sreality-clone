@@ -1,5 +1,6 @@
 import scrapy
 from sreality.items import Flat
+from uuid import uuid4
 
 
 class FlatsSellSpider(scrapy.Spider):
@@ -7,11 +8,11 @@ class FlatsSellSpider(scrapy.Spider):
     start_urls = ['https://www.sreality.cz/hledani/prodej/byty']
     item_scraped_count = 0
     items_to_scrape = 500
+    scrape_id = uuid4()
 
     def parse(self, response):
         div_elements = response.xpath('//div[contains(@class, "dir-property-list")]/div[contains(@class, "property")]')
 
-        flat = Flat()
         for div_element in div_elements:
             if self.item_scraped_count >= self.items_to_scrape:
                 return
@@ -23,8 +24,10 @@ class FlatsSellSpider(scrapy.Spider):
             img_url = img_element.attrib.get('src') if img_element else ""
             title = span_element.xpath('string()').get().strip() if span_element else ""
 
+            flat = Flat()
             flat['title'] = title
             flat['img_url'] = img_url
+            flat['scrape_id'] = str(self.scrape_id)
             yield flat
             
         next_page = response.css('li.paging-item a.paging-next::attr(href)').extract_first()

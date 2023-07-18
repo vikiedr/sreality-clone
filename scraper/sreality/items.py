@@ -9,3 +9,4 @@ import scrapy
 class Flat(scrapy.Item):
    title = scrapy.Field()
    img_url = scrapy.Field()
+   scrape_id = scrapy.Field()

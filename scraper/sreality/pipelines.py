@@ -21,9 +21,10 @@ class SrealityPipeline:
         self.cur = self.connection.cursor()
         
     def process_item(self, item, spider):
-        self.cur.execute(""" insert into listing_flat (title, img_url) values (%s,%s)""", (
+        self.cur.execute(""" insert into listing_flat (title, img_url, scrape_id) values (%s,%s,%s)""", (
             item["title"],
-            item["img_url"]
+            item["img_url"],
+            item["scrape_id"]
         ))
 
         self.connection.commit()
